@@ -1,0 +1,9 @@
+@(parties: Seq[Party])
+
+@main("Parties"){
+    <ul>
+    @for(party <- parties) {
+        <li><a href="@routes.Party.show(party.id)">@party.title</a></li>
+    }
+    </ul>
+}

@@ -1,0 +1,18 @@
+@(party: Party)
+
+@main(s"Dude party $party.id is insane") {
+    <div>
+        <h2>@party.title</h2>
+        <ul>
+            @for(member <- party.members) {
+                <li>@member.login</li>
+            }
+        </ul>
+
+        <ul id="contributions">
+            @for(contribution <- party.contributions) {
+                <li>$@contribution.amount from @contribution.user.login</li>
+            }
+        </ul>
+    </div>
+}
