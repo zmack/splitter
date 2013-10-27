@@ -1,0 +1,9 @@
+@(partyForm: Form[models.Party])(implicit flash:Flash)
+@import helper._
+
+@main("Adding a new_party party") {
+    @helper.form(action = routes.Party.create()) {
+        @helper.inputText(partyForm("title"))
+        <input type="submit" />
+    }
+}
