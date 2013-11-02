@@ -1,2 +1,14 @@
 @(form: Form[(String, String)])
 Hello world
+@helper.form(routes.Application.authenticate) {
+    <b>@form.errorsAsJson.toString()</b>
+    <label>
+        Login
+        <input type="text" name="email"/>
+    </label>
+    <label>
+        Password
+        <input type="password" name="password"/>
+    </label>
+    <input type="submit" value="Log in"/>
+}

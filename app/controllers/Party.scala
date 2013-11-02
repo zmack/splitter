@@ -4,19 +4,19 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, longNumber, nonEmptyText}
 import play.api.mvc._
 
-object Party extends Controller {
+object Party extends Controller with Secured {
   val partyForm: Form[models.Party] = Form(
     mapping(
       "title" -> nonEmptyText
     )(models.Party.createFromForm)(models.Party.serializeToForm)
   )
 
-  def index = Action {
+  def index = isAuthenticated { user => _ =>
     val parties = models.Party.findAll(10)
-    Ok(views.html.party.index(parties))
+    Ok(views.html.party.index(parties, user))
   }
 
-  def show(id: Long) = Action {
+  def show(id: Long) = isAuthenticated { user => _ =>
     val party = models.Party.findById(id)
     Ok(views.html.party.show(party))
   }
