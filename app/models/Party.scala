@@ -9,6 +9,10 @@ case class Party(id: Long, user:User, title: String) {
   def contributions = {
     members.map(member => new Contribution(0, this, member, 10.00))
   }
+
+  def isOwnedBy(user: User) = {
+    true
+  }
 }
 
 
