@@ -1,5 +1,8 @@
 package models
 import scala.collection.mutable.MutableList
+import scala.slick.driver.H2Driver.simple._
+import Database.threadLocalSession
+
 
 case class Party(id: Long, user:User, title: String) {
   def members = {
@@ -41,6 +44,14 @@ object Party {
   }
 
   def save(party:Party) = {
-    partyPersistence += party
+    Parties.insert((0, party.user.id, party.title))
   }
+}
+
+object Parties extends Table[(Int, Long, String)]("PARTIES") {
+  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def user_id = column[Long]("USER_ID", O.NotNull)
+  def title = column[String]("TITLE")
+
+  def * = id ~ user_id ~ title
 }
