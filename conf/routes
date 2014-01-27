@@ -3,16 +3,20 @@
 # ~~~~
 
 # Home page
-GET         /                    controllers.Application.index
-GET         /login               controllers.Application.login
-POST        /login               controllers.Application.authenticate
-GET         /parties             controllers.Party.index
-GET         /parties/new         controllers.Party.new_party
-GET         /party/:id           controllers.Party.show(id:Long)
+GET         /                              controllers.Application.index
+GET         /login                         securesocial.controllers.LoginPage.login
+GET         /logout                        securesocial.controllers.LoginPage.logout
 
-POST        /parties             controllers.Party.create
-POST        /party/:id           controllers.Party.update(id:Long)
+GET         /authenticate/:provider        securesocial.controllers.ProviderController.authenticate(provider)
+POST        /authenticate/:provider        securesocial.controllers.ProviderController.authenticateByPost(provider)
+
+GET         /parties                       controllers.Party.index
+GET         /parties/new                   controllers.Party.new_party
+GET         /party/:id                     controllers.Party.show(id:Long)
+
+POST        /parties                       controllers.Party.create
+POST        /party/:id                     controllers.Party.update(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file        controllers.Assets.at(path="/public", file)
+GET         /assets/*file                  controllers.Assets.at(path="/public", file)
 

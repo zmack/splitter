@@ -1,0 +1,3 @@
+9994:securesocial.core.DefaultAuthenticatorStore
+9997:securesocial.controllers.DefaultTemplatesPlugin
+10001:securesocial.core.providers.FacebookProvider
