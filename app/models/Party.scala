@@ -1,7 +1,6 @@
 package models
 import scala.collection.mutable.MutableList
 import scala.slick.driver.H2Driver.simple._
-import Database.threadLocalSession
 
 
 case class Party(id: Long, user:User, title: String) {
@@ -44,14 +43,29 @@ object Party {
   }
 
   def save(party:Party) = {
-    Parties.insert((0, party.user.id, party.title))
+    // Parties.insert((0, party.user.id, party.title))
   }
 }
 
-object Parties extends Table[(Int, Long, String)]("PARTIES") {
+class Parties(tag: Tag) extends Table[(Int, Long, String)](tag, "PARTIES") {
   def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
   def user_id = column[Long]("USER_ID", O.NotNull)
   def title = column[String]("TITLE")
 
-  def * = id ~ user_id ~ title
+  def * = (id, user_id, title)
+}
+
+object Parties {
+  val parties = TableQuery[Parties]
+  Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver").withSession { implicit session =>
+    parties.ddl.create
+
+    def insert(party:Party) = {
+      parties += (0, party.user.id, party.title)
+    }
+
+    def findForUser(user:models.User) = {
+      parties.filter(_.user_id == user.id)
+    }
+  }
 }

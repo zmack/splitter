@@ -1,7 +1,12 @@
 @(parties: Traversable[Party], user: models.User)
 
 @main("Parties"){
-    <h1>Parties for @user.email</h1>
+    <h1>
+        Parties for
+            <img src="@user.getAvatar" title="@user.login's avatar" />
+            @user.email
+    </h1>
+
     <ul>
     @for(party <- parties) {
         <li><a href="@routes.Party.show(party.id)">@party.title</a></li>

@@ -4,19 +4,20 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, longNumber, nonEmptyText}
 import play.api.mvc._
 
-object Party extends Controller with Secured {
+object Party extends Controller with securesocial.core.SecureSocial {
   val partyForm: Form[models.Party] = Form(
     mapping(
       "title" -> nonEmptyText
     )(models.Party.createFromForm)(models.Party.serializeToForm)
   )
 
-  def index = isAuthenticated { user => _ =>
-    val parties = models.Party.findAll(10)
+  def index = SecuredAction { implicit request =>
+    val user = models.User.findByIdentity(request.user)
+    val parties = models.Parties.findForUser(user.id)
     Ok(views.html.party.index(parties, user))
   }
 
-  def show(id: Long) = isAuthenticated { user => _ =>
+  def show(id: Long) = SecuredAction { implicit request =>
     val party = models.Party.findById(id)
     Ok(views.html.party.show(party))
   }
