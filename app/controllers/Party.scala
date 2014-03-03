@@ -13,8 +13,8 @@ object Party extends Controller with securesocial.core.SecureSocial {
 
   def index = SecuredAction { implicit request =>
     val user = models.User.findByIdentity(request.user)
-    val parties = models.Parties.findForUser(user.id)
-    Ok(views.html.party.index(parties, user))
+    val parties = models.Parties.findForUser(user)
+    Ok("")
   }
 
   def show(id: Long) = SecuredAction { implicit request =>

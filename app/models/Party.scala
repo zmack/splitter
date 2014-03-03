@@ -47,8 +47,8 @@ object Party {
   }
 }
 
-class Parties(tag: Tag) extends Table[(Int, Long, String)](tag, "PARTIES") {
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+class Parties(tag: Tag) extends Table[(Long, Long, String)](tag, "PARTIES") {
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def user_id = column[Long]("USER_ID", O.NotNull)
   def title = column[String]("TITLE")
 
@@ -57,15 +57,14 @@ class Parties(tag: Tag) extends Table[(Int, Long, String)](tag, "PARTIES") {
 
 object Parties {
   val parties = TableQuery[Parties]
-  Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver").withSession { implicit session =>
-    parties.ddl.create
+  implicit val session = Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver").createSession()
+  parties.ddl.create(session)
 
-    def insert(party:Party) = {
-      parties += (0, party.user.id, party.title)
-    }
+  def insert(party:Party) = {
+    parties += (0, party.user.id, party.title)
+  }
 
-    def findForUser(user:models.User) = {
-      parties.filter(_.user_id == user.id)
-    }
+  def findForUser(user:models.User) = {
+    parties.filter(_.user_id == user.id)
   }
 }
